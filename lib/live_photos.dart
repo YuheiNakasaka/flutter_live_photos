@@ -16,4 +16,9 @@ class LivePhotos {
     );
     return status;
   }
+
+  static Future<bool> openSettings() async {
+    final bool status = await _channel.invokeMethod('openSettings');
+    return status;
+  }
 }

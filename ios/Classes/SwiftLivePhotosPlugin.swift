@@ -24,6 +24,14 @@ public class SwiftLivePhotosPlugin: NSObject, FlutterPlugin {
                 result(true)
             })
             livePhotoClient.runLivePhotoConvertion(rawURL: videoURL)
+        case "openSettings":
+            if let url = URL(string: "App-prefs:root=Wallpaper"), UIApplication.shared.canOpenURL(url) {
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                } else {
+                    UIApplication.shared.openURL(url)
+                }
+            }
         default:
             result(FlutterMethodNotImplemented)
     }

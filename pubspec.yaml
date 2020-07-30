@@ -1,6 +1,6 @@
 name: live_photos
 description: This generates LivePhotos which is a feature to be able to use in only iOS from video url and it's downloaded to Camera Roll.
-version: 0.1.0
+version: 0.2.0
 homepage: 'https://github.com/YuheiNakasaka/flutter_live_photos'
 
 environment:

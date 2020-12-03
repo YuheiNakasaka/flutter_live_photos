@@ -23,7 +23,17 @@ public class SwiftLivePhotosPlugin: NSObject, FlutterPlugin {
             let livePhotoClient = LivePhotoClient(callback: {() in
                 result(true)
             })
-            livePhotoClient.runLivePhotoConvertion(rawURL: videoURL)
+            livePhotoClient.runLivePhotoConvertionFromVideoURL(rawURL: videoURL)
+        case "generateFromLocalPath":
+            let args = call.arguments as! [String: Any]
+            guard let localPath = args["localPath"] as? String else {
+                result(false)
+                return
+            }
+            let livePhotoClient = LivePhotoClient(callback: {() in
+                result(true)
+            })
+            livePhotoClient.runLivePhotoConvertionFromLocalPath(rawURL: localPath)
         case "openSettings":
             if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
                 if #available(iOS 10.0, *) {
@@ -51,7 +61,7 @@ class LivePhotoClient {
     }
     
     // LivePhoto変換エントリポイント
-    public func runLivePhotoConvertion(rawURL: String) {
+    public func runLivePhotoConvertionFromVideoURL(rawURL: String) {
         if let videoURL = URL(string: rawURL) {
             let photos = PHPhotoLibrary.authorizationStatus()
             if photos == .notDetermined {
@@ -75,7 +85,37 @@ class LivePhotoClient {
             }
         }
     }
-    
+
+    // LivePhoto変換エントリポイント
+    public func runLivePhotoConvertionFromLocalPath(rawURL: String) {
+        if let localPath = URL(string: rawURL) {
+            let photos = PHPhotoLibrary.authorizationStatus()
+            print("Init files")
+            let pngPath = self.filePath(forKey: STILL_KEY)!
+            let outputPath = self.filePath(forKey: MOV_KEY)!
+            self.deleteFile(url: pngPath)
+            self.deleteFile(url: outputPath)
+            self.copy(localPath, toPathName: outputPath)
+            if photos == .notDetermined {
+                PHPhotoLibrary.requestAuthorization({status in
+                    if status == .authorized{
+                        print("AVAssetExportSessionStatus completed")
+                        self.generateThumbnail(movURL: localPath)
+                        print("generateThumbnail completed")
+                        self.generateLivePhoto()
+                    } else {
+                        print("CameraRoll permission denied")
+                    }
+                })
+            } else {
+                print("AVAssetExportSessionStatus completed")
+                self.generateThumbnail(movURL: outputPath)
+                print("generateThumbnail completed")
+                self.generateLivePhoto()
+            }
+        }
+    }
+
     // MP4をMovに変換する
     private func convertMp4ToMov(mp4Path: URL) {
         // srcのビデオをmovに変換する
@@ -189,6 +229,15 @@ class LivePhotoClient {
         guard let documentURL = fileManager.urls(for: .documentDirectory,
                                                 in: FileManager.SearchPathDomainMask.userDomainMask).first else { return nil }
         return documentURL.appendingPathComponent(key + "." + key)
+    }
+    
+    private func copy(_ atPathName: URL, toPathName: URL) {
+        let fileManager = FileManager.default
+        do {
+            try fileManager.copyItem(atPath: atPathName.path, toPath: toPathName.path)
+        } catch {
+            print("Failed to copy file")
+        }
     }
     
     private func deleteFile(url: URL) {

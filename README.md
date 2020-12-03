@@ -1,6 +1,6 @@
 # live_photos
 
-Generate LivePhotos from video url and it's downloaded to Camera Roll.
+Generate LivePhotos from video url or local mp4 file and it's downloaded to Camera Roll.
 
 This package is available for only iOS. 
 
@@ -24,6 +24,7 @@ Make sure you add the following key to Info.plist for iOS.
 ```dart
 import 'package:live_photos/live_photos.dart';
 
+// Video URL
 LivePhotos.generate(
   videoURL: "https://img.gifmagazine.net/gifmagazine/images/3870471/original.mp4",
 ).then((status) {
@@ -33,7 +34,19 @@ LivePhotos.generate(
     print("Failed to convert");
   }
 });
+
+// Local File
+LivePhotos.generate(
+  localPath: "<local mp4 file path>"
+).then((status) {
+  if (status) {
+    print("Success to generate LivePhotos");
+  } else {
+    print("Failed to convert");
+  }
+});
 ```
+
 ### Available format
 For now, the plugin can convert only the mp4 video.
 

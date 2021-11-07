@@ -6,8 +6,8 @@ class LivePhotos {
   static const MethodChannel _channel = const MethodChannel('live_photos');
 
   static Future<bool> generate({
-    String videoURL,
-    String localPath,
+    String? videoURL,
+    String? localPath,
   }) async {
     assert(videoURL != null || localPath != null,
         'Either videoURL or localPath must be set.');

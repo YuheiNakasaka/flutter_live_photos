@@ -135,16 +135,16 @@ class LivePhotoClient {
             
             exportSession.exportAsynchronously { () -> Void in
                 switch exportSession.status {
-                case AVAssetExportSessionStatus.completed:
+                case AVAssetExportSession.Status.completed:
                     print("AVAssetExportSessionStatus completed")
                     self.generateThumbnail(movURL: outputURL)
                     print("generateThumbnail completed")
                     self.generateLivePhoto()
                     break
-                case AVAssetExportSessionStatus.failed:
+                case AVAssetExportSession.Status.failed:
                     print("AVAssetExportSessionStatus failed. \(String(describing: exportSession.error))")
                     break
-                case AVAssetExportSessionStatus.cancelled:
+                case AVAssetExportSession.Status.cancelled:
                     print("AVAssetExportSessionStatus cancelled")
                     break
                 default:

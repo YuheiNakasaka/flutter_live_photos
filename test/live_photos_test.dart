@@ -10,7 +10,7 @@ void main() {
   setUp(() {
     channel.setMockMethodCallHandler((MethodCall methodCall) async {
       if (methodCall.method == "generateFromURL") {
-        String url = methodCall.arguments["videoURL"];
+        String? url = methodCall.arguments["videoURL"];
         if (url != null) {
           return true;
         } else {

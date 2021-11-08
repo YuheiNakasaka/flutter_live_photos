@@ -5,3 +5,5 @@
 ## 0.2.0 Fixed the bugs rejected when reviewed in Apple
 
 ## 0.3.0 Added a feature to convert local mp4 file to LivePhotos
+
+## 0.4.0 BREAKING CHANGE: null safety

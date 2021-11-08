@@ -7,3 +7,6 @@
 build/
 
 doc.api/
+
+.fvm/
+.vscode/

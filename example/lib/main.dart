@@ -29,14 +29,15 @@ class _MyAppState extends State<MyApp> {
           children: <Widget>[
             GenFromURLButton(),
             const SizedBox(height: 60),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Select local video'),
               onPressed: () async {
-                final pickedFile =
-                    await picker.getVideo(source: ImageSource.gallery);
-                setState(() {
-                  videoFile = pickedFile.path;
-                });
+                final pickedFile = await picker.getVideo(source: ImageSource.gallery);
+                if (pickedFile != null) {
+                  setState(() {
+                    videoFile = pickedFile.path;
+                  });
+                }
               },
             ),
             Text('path: $videoFile'),
@@ -52,12 +53,11 @@ class _MyAppState extends State<MyApp> {
 class GenFromURLButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
+    return ElevatedButton(
       child: Text('generate from url'),
       onPressed: () {
         LivePhotos.generate(
-          videoURL:
-              "https://img.gifmagazine.net/gifmagazine/images/3870471/original.mp4",
+          videoURL: "https://img.gifmagazine.net/gifmagazine/images/3870471/original.mp4",
         ).then(
           (value) {
             if (value) {
@@ -69,14 +69,13 @@ class GenFromURLButton extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    content: Text(
-                        'You can set the downloaded gif in [Settings] > [Wallpaper].'),
+                    content: Text('You can set the downloaded gif in [Settings] > [Wallpaper].'),
                     actions: <Widget>[
-                      FlatButton(
+                      TextButton(
                         child: Text('Cancel'),
                         onPressed: () => Navigator.pop(ctx),
                       ),
-                      FlatButton(
+                      TextButton(
                         child: Text('Open'),
                         onPressed: () => LivePhotos.openSettings(),
                       )
@@ -103,7 +102,7 @@ class GenFromLocalPathButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
+    return ElevatedButton(
       child: Text('generate from local path'),
       onPressed: () {
         if (path == '') {
@@ -122,14 +121,13 @@ class GenFromLocalPathButton extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    content: Text(
-                        'You can set the downloaded gif in [Settings] > [Wallpaper].'),
+                    content: Text('You can set the downloaded gif in [Settings] > [Wallpaper].'),
                     actions: <Widget>[
-                      FlatButton(
+                      TextButton(
                         child: Text('Cancel'),
                         onPressed: () => Navigator.pop(ctx),
                       ),
-                      FlatButton(
+                      TextButton(
                         child: Text('Open'),
                         onPressed: () => LivePhotos.openSettings(),
                       )
